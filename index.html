@@ -144,7 +144,7 @@
     const btn = $("submitBtn"); btn.disabled = true; btn.textContent = "ОТПРАВЛЯЕМ...";
     $("status").textContent = "";
     try {
-      const res = await fetch("SUPABASE_FUNCTION_URL", {
+     const res = await fetch("https://gchdhejrmjnxgyeqpfwf.supabase.co/functions/v1/create-order", {
         method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(payload)
       });
       const data = await res.json();
