@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111118">
+  <title>DropChina — доставка из Китая</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root{--bg:#111118;--panel:#20202e;--panel2:#171720;--red:#ed242b;--muted:#a3a5b3;--line:#343443;--white:#f5f5fa}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .top{background:#20202f;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+    .brand{font-size:27px;font-weight:850;letter-spacing:-1.2px}.brand span{color:var(--red)}
+    .rate{font-size:12px;color:#c0c1cc;text-align:right;line-height:1.5}
+    main{max-width:560px;margin:auto;padding:26px 18px 50px}
+    h1{font-size:39px;line-height:1.07;letter-spacing:-1.6px;margin:16px 0}
+    h1 span{color:var(--red)}.lead{color:var(--muted);font-size:17px;line-height:1.5;margin:0 0 24px}
+    .btn{border:0;border-radius:17px;padding:17px 18px;font-size:17px;font-weight:800;cursor:pointer;width:100%;color:white;background:var(--red)}
+    .btn.secondary{background:#29293a;border:1px solid #414153}.btn:disabled{opacity:.55;cursor:not-allowed}
+    .choice{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0 24px}
+    .choice button{min-height:88px;text-align:left;padding:15px;border-radius:17px;background:var(--panel);border:1px solid var(--line);color:white;font-weight:800;font-size:16px}
+    .choice button small{display:block;color:var(--muted);font-weight:500;font-size:12px;margin-top:7px}
+    .choice button.active{border:2px solid var(--red);background:#2a202b}
+    .card{background:var(--panel);border-radius:22px;padding:20px;margin:20px 0}
+    h2{font-size:21px;margin:0 0 18px}
+    label{display:block;color:var(--muted);font-size:14px;margin:14px 0 7px}
+    input,select,textarea{width:100%;border:1px solid #393949;border-radius:13px;background:#12121a;color:white;padding:14px;font-size:16px;outline:none}
+    input:focus,select:focus,textarea:focus{border-color:var(--red)}
+    textarea{min-height:76px;resize:vertical}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .hint{color:var(--muted);font-size:13px;line-height:1.45;margin:10px 0}
+    .check{display:flex;gap:9px;align-items:flex-start;color:var(--muted);font-size:13px;line-height:1.4;margin:15px 0}
+    .check input{width:auto;margin-top:2px;accent-color:var(--red)}
+    .notice{background:#252536;border:1px solid #3b3b4c;border-radius:14px;padding:14px;color:#c6c7d2;font-size:14px;line-height:1.5}
+    .notice strong{color:white}.hidden{display:none!important}
+    .section-title{font-size:13px;color:var(--muted);font-weight:800;letter-spacing:1px;margin:30px 0 12px}
+    .link{color:#fff;text-decoration:none}
+    .success{padding:22px;text-align:center}.success .emoji{font-size:42px}
+    footer{text-align:center;color:#777989;font-size:12px;padding:12px}
+    @media(max-width:380px){h1{font-size:34px}.choice{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><span>Drop</span>China</div>
+    <div class="rate">ДОСТАВКА ИЗ КИТАЯ<br><b>В БЕЛАРУСЬ</b></div>
+  </header>
+  <main>
+    <h1>Доставка<br>из <span>Китая</span><br>в Беларусь</h1>
+    <p class="lead">Заказывай товары из Китая просто. Доставка заказов по Беларуси осуществляется Европочтой.</p>
+
+    <div class="section-title">ВЫБЕРИТЕ ТИП ЗАКАЗА</div>
+    <div class="choice">
+      <button type="button" class="active" data-kind="small">МАЛЕНЬКИЙ ЗАКАЗ<small>Обычная покупка</small></button>
+      <button type="button" data-kind="wholesale">ОПТОВЫЙ ЗАКАЗ<small>От 10 товаров</small></button>
+    </div>
+
+    <form id="orderForm">
+      <section class="card">
+        <h2>🛍️ Информация о товаре</h2>
+        <label for="productUrl">Ссылка на товар Pinduoduo</label>
+        <input id="productUrl" type="url" placeholder="Вставьте ссылку на товар" required>
+        <label for="sizes">Размеры</label>
+        <input id="sizes" type="text" placeholder="Например: S, M, XL, 38, 42" required>
+        <div class="grid">
+          <div><label for="quantity">Количество товаров</label><input id="quantity" type="number" min="1" value="1" required></div>
+          <div><label for="city">Город</label>
+            <select id="city" required>
+              <option value="Пинск">Пинск</option>
+              <option value="Другой город Беларуси">Другой город Беларуси</option>
+            </select>
+          </div>
+        </div>
+        <div id="wholesaleHint" class="hint hidden">Оптовый заказ оформляется от 10 товаров.</div>
+      </section>
+
+      <section class="card" id="addressCard">
+        <h2>📍 Адрес доставки в Пинске</h2>
+        <p class="hint">Заполните адрес прямо здесь. Данные будут отправлены администратору вместе с заказом.</p>
+        <label for="fullName">Имя и фамилия получателя</label><input id="fullName" type="text" placeholder="Ваше ФИО">
+        <label for="phone">Номер телефона</label><input id="phone" type="tel" placeholder="+375 XX XXX XX XX">
+        <label for="street">Улица и номер дома</label><input id="street" type="text" placeholder="Например: ул. Ленина, 15">
+        <label for="apartment">Квартира (если есть)</label><input id="apartment" type="text" placeholder="Номер квартиры">
+      </section>
+
+      <section class="card hidden" id="otherCityCard">
+        <h2>🚚 Доставка по Беларуси</h2>
+        <div class="notice">Доставка осуществляется <strong>Европочтой</strong>. Для согласования доставки в другой город и по всем вопросам напишите менеджеру <strong>@exxtm</strong>.</div>
+        <p class="hint"><a class="link" href="https://t.me/exxtm" target="_blank" rel="noopener">Открыть чат с @exxtm →</a></p>
+      </section>
+
+      <section class="card">
+        <h2>💬 Дополнительно</h2>
+        <label for="comment">Комментарий к заказу (необязательно)</label>
+        <textarea id="comment" placeholder="Пожелания или уточнения"></textarea>
+        <div class="notice">После отправки заявка поступит администратору. По вопросам оплаты и заказа можно написать <strong>@exxtm</strong>.</div>
+        <label class="check"><input id="agree" type="checkbox" required><span>Подтверждаю, что ссылка, размеры, количество и контактные данные указаны правильно.</span></label>
+        <button class="btn" id="submitBtn" type="submit">ОТПРАВИТЬ ЗАКАЗ</button>
+        <p class="hint" id="status" role="status"></p>
+      </section>
+    </form>
+
+    <div class="card success hidden" id="success">
+      <div class="emoji">✅</div><h2>Заявка отправлена!</h2>
+      <p class="hint">Администратор получил информацию о заказе. По вопросам оплаты и доставки напишите @exxtm.</p>
+      <a class="btn" style="display:block;text-decoration:none" href="https://t.me/exxtm" target="_blank" rel="noopener">НАПИСАТЬ МЕНЕДЖЕРУ</a>
+    </div>
+    <footer>DropChina · Доставка из Китая в Беларусь</footer>
+  </main>
+<script>
+(() => {
+  const tg = window.Telegram?.WebApp;
+  tg?.ready(); tg?.expand();
+  const $ = id => document.getElementById(id);
+  let kind = "small";
+  document.querySelectorAll("[data-kind]").forEach(btn => btn.addEventListener("click", () => {
+    kind = btn.dataset.kind;
+    document.querySelectorAll("[data-kind]").forEach(b => b.classList.toggle("active", b === btn));
+    $("wholesaleHint").classList.toggle("hidden", kind !== "wholesale");
+    $("quantity").min = kind === "wholesale" ? "10" : "1";
+    if (kind === "wholesale" && Number($("quantity").value) < 10) $("quantity").value = 10;
+    if (kind === "small" && Number($("quantity").value) < 1) $("quantity").value = 1;
+  }));
+  function updateCity() {
+    const pinsk = $("city").value === "Пинск";
+    $("addressCard").classList.toggle("hidden", !pinsk);
+    $("otherCityCard").classList.toggle("hidden", pinsk);
+    ["fullName","phone","street"].forEach(id => $(id).required = pinsk);
+  }
+  $("city").addEventListener("change", updateCity); updateCity();
+
+  $("orderForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const quantity = Number($("quantity").value);
+    if (kind === "wholesale" && quantity < 10) { $("status").textContent = "Для оптового заказа нужно минимум 10 товаров."; return; }
+    const initData = tg?.initData || "";
+    if (!initData) { $("status").textContent = "Откройте приложение через Telegram, чтобы отправить заказ."; return; }
+    const payload = {
+      initData, kind, productUrl: $("productUrl").value.trim(), sizes: $("sizes").value.trim(),
+      quantity, city: $("city").value, fullName: $("fullName").value.trim(),
+      phone: $("phone").value.trim(), street: $("street").value.trim(),
+      apartment: $("apartment").value.trim(), comment: $("comment").value.trim()
+    };
+    const btn = $("submitBtn"); btn.disabled = true; btn.textContent = "ОТПРАВЛЯЕМ...";
+    $("status").textContent = "";
+    try {
+      const res = await fetch("SUPABASE_FUNCTION_URL", {
+        method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.error || "Не удалось отправить заявку");
+      $("orderForm").classList.add("hidden"); $("success").classList.remove("hidden");
+      tg?.HapticFeedback?.notificationOccurred("success");
+    } catch(err) {
+      $("status").textContent = err.message || "Ошибка отправки. Попробуйте ещё раз.";
+      btn.disabled = false; btn.textContent = "ОТПРАВИТЬ ЗАКАЗ";
+    }
+  });
+})();
+</script>
+</body>
+</html>
